@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}About Sthala Purana{% endblock %}
+
+{% block content %}
+
+<!-- HERO (use global hero system instead of custom CSS) -->
+<section class="hero-section" style="min-height: 60vh;">
+    <div>
+        <h1 class="hero-title">Sthala Purana</h1>
+        <p class="hero-subtitle">
+            Preserving sacred stories, spiritual heritage,
+            and divine history of India's temples
+        </p>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+    <div class="container">
+
+        <div class="stats-grid">
+
+            <div class="stat-card reveal">
+                <h2 class="stat-number">{{ temple_count }}+</h2>
+                <p>Temples Documented</p>
+            </div>
+
+            <div class="stat-card reveal">
+                <h2 class="stat-number">{{ user_count }}+</h2>
+                <p>Pilgrims</p>
+            </div>
+
+            <div class="stat-card reveal">
+                <h2 class="stat-number">{{ review_count }}+</h2>
+                <p>Reviews</p>
+            </div>
+
+            <div class="stat-card reveal">
+                <h2 class="stat-number">15+</h2>
+                <p>States Covered</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- MISSION -->
+<section class="section">
+    <div class="container">
+
+        <div class="card-box reveal">
+
+            <h2>Our Mission</h2>
+
+            <p>
+                <strong>Sthala Purana</strong> is a digital spiritual heritage platform
+                dedicated to preserving sacred histories of India's ancient temples.
+            </p>
+
+            <p>
+                Every temple carries stories of gods, saints, miracles and devotion.
+                These sacred narratives are preserved here for future generations.
+            </p>
+
+            <p>
+                We combine tradition with modern technology to create a meaningful
+                pilgrimage experience for devotees and travelers.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- TRADITIONS -->
+<section class="section">
+    <div class="container">
+
+        <h2 class="text-center mb-4">Sacred Traditions</h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4 reveal">
+                <div class="card-box text-center">
+                    <div style="font-size:2.5rem;">🔱</div>
+                    <h5>Shaiva Tradition</h5>
+                    <p>Temples of Lord Shiva, Jyotirlingas and shrines.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 reveal">
+                <div class="card-box text-center">
+                    <div style="font-size:2.5rem;">🪷</div>
+                    <h5>Vaishnava Tradition</h5>
+                    <p>Divine temples of Lord Vishnu and sacred pilgrimages.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 reveal">
+                <div class="card-box text-center">
+                    <div style="font-size:2.5rem;">🌺</div>
+                    <h5>Shakta Tradition</h5>
+                    <p>Temples of Divine Mother and Shakti Peethas.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+    <div class="container">
+
+        <h2 class="text-center mb-4">What We Offer</h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-3 reveal">
+                <div class="card-box">📜 Sacred Histories</div>
+            </div>
+
+            <div class="col-md-3 reveal">
+                <div class="card-box">🗺️ Temple Maps</div>
+            </div>
+
+            <div class="col-md-3 reveal">
+                <div class="card-box">🧭 Travel Planner</div>
+            </div>
+
+            <div class="col-md-3 reveal">
+                <div class="card-box">⭐ Reviews</div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- QUOTE -->
+<section class="section text-center">
+
+    <div class="container">
+
+        <div class="card-box reveal">
+
+            <p style="font-style: italic; font-size: 1.2rem;">
+                “A temple is not stone — it is a living bridge between humanity and divinity.”
+            </p>
+
+            <p><strong>— Sthala Purana Team</strong></p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CTA -->
+<section class="section text-center">
+
+    <a href="{{ url_for('temples') }}" class="btn btn-gold me-2">
+        Explore Temples
+    </a>
+
+    <a href="{{ url_for('register') }}" class="btn btn-outline-dark">
+        Join Community
+    </a>
+
+</section>
+
+{% endblock %}

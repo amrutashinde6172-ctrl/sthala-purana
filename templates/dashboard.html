@@ -1,0 +1,292 @@
+{% extends "base_admin.html" %}
+{% block title %}Dashboard – Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('admin_add_temple') }}" class="btn-topbar btn-topbar-primary">
+  <i class="fas fa-plus"></i> Add Temple
+</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Stats Grid -->
+<div class="admin-stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-maroon"><i class="fas fa-gopuram"></i></div>
+    <div>
+      <span class="stat-num">{{ temple_count }}</span>
+      <div class="stat-label">Total Temples</div>
+      <div class="stat-trend stat-trend-up"><i class="fas fa-arrow-up"></i> All documented</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-blue"><i class="fas fa-users"></i></div>
+    <div>
+      <span class="stat-num">{{ user_count }}</span>
+      <div class="stat-label">Registered Users</div>
+      <div class="stat-trend stat-trend-up"><i class="fas fa-arrow-up"></i> Growing</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-gold"><i class="fas fa-star"></i></div>
+    <div>
+      <span class="stat-num">{{ review_count }}</span>
+      <div class="stat-label">Reviews</div>
+      <div class="stat-trend stat-trend-up"><i class="fas fa-arrow-up"></i> Active</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-saffron"><i class="fas fa-envelope"></i></div>
+    <div>
+      <span class="stat-num">{{ contact_count }}</span>
+      <div class="stat-label">Unread Messages</div>
+      {% if contact_count > 0 %}
+      <div class="stat-trend" style="color:#e8761a"><i class="fas fa-exclamation-circle"></i> Needs attention</div>
+      {% else %}
+      <div class="stat-trend stat-trend-up"><i class="fas fa-check"></i> All read</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Two Column Layout -->
+<div class="admin-grid-2" style="gap:24px;margin-bottom:24px">
+
+  <!-- Temple Management Table -->
+  <div class="admin-card" style="grid-column: 1 / -1">
+    <div class="admin-card-header">
+      <div class="admin-card-title"><i class="fas fa-gopuram"></i> Temple Management</div>
+      <a href="{{ url_for('admin_add_temple') }}" class="btn-topbar btn-topbar-primary" style="font-size:0.75rem;padding:7px 14px">
+        <i class="fas fa-plus"></i> Add New
+      </a>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Temple Name</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>State</th>
+            <th>Views</th>
+            <th>Featured</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for temple in temples %}
+          <tr>
+            <td style="color:#a08060;font-size:0.8rem">{{ loop.index }}</td>
+            <td>
+              <img src="{{ url_for('static', filename='images/' + temple.image) }}"
+                   onerror="this.src='https://images.unsplash.com/photo-1624464557293-48aa3e3d7a11?w=60'" alt="">
+            </td>
+            <td><strong style="color:#3a0808">{{ temple.name }}</strong></td>
+            <td>
+              <span class="status-badge {% if temple.category == 'Shiva' %}status-pending{% elif temple.category == 'Vishnu' %}status-active{% else %}status-approved{% endif %}"
+                    style="{% if temple.category == 'Vishnu' %}background:rgba(80,40,160,0.12);color:#5028a0;border-color:rgba(80,40,160,0.3){% elif temple.category == 'Devi' %}background:rgba(144,24,48,0.12);color:#901830;border-color:rgba(144,24,48,0.3){% endif %}">
+                {{ temple.category }}
+              </span>
+            </td>
+            <td>{{ temple.city }}, {{ temple.state }}</td>
+            <td style="color:#7a5535">{{ temple.state }}</td>
+            <td>
+              <span style="font-family:'Cinzel',serif;font-size:0.85rem;color:#a07820">
+                {{ temple.review_count }}
+              </span>
+            </td>
+            <td>
+              {% if temple.is_featured %}
+              <span class="status-badge status-active"><i class="fas fa-star"></i> Yes</span>
+              {% else %}
+              <span class="status-badge status-inactive">No</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="tbl-actions">
+                <a href="{{ url_for('temple_detail', temple_id=temple.id) }}"
+                   class="tbl-btn tbl-btn-view" title="View" target="_blank">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a href="{{ url_for('admin_edit_temple', temple_id=temple.id) }}"
+                   class="tbl-btn tbl-btn-edit" title="Edit">
+                  <i class="fas fa-pen"></i>
+                </a>
+                <form method="POST" action="{{ url_for('admin_delete_temple', temple_id=temple.id) }}"
+                      style="display:inline" onsubmit="return confirm('Delete {{ temple.name }}?')">
+                  <button type="submit" class="tbl-btn tbl-btn-delete" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Row -->
+<div class="admin-grid-2" style="gap:24px">
+
+  <!-- Recent Users -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title"><i class="fas fa-users"></i> Recent Users</div>
+      <a href="{{ url_for('admin_users') }}" style="font-size:0.78rem;color:#a07820;text-decoration:none">
+        View All <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    <div class="admin-card-body" style="padding:0">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in recent_users %}
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7a1c1c,#5a1212);color:#d4af37;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:0.75rem;font-weight:700;flex-shrink:0">
+                  {{ user.username[0].upper() }}
+                </div>
+                <strong style="font-size:0.85rem">{{ user.username }}</strong>
+              </div>
+            </td>
+            <td style="color:#7a5535;font-size:0.82rem">{{ user.email[:28] }}{% if user.email|length > 28 %}...{% endif %}</td>
+            <td>
+              {% if user.is_admin %}
+              <span class="status-badge status-pending">Admin</span>
+              {% else %}
+              <span class="status-badge status-active">User</span>
+              {% endif %}
+            </td>
+            <td style="color:#a08060;font-size:0.78rem">{{ user.joined_date.strftime('%d %b %Y') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Top Temples -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title"><i class="fas fa-fire"></i> Most Viewed Temples</div>
+    </div>
+    <div class="admin-card-body" style="padding:0">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Temple</th>
+            <th>Category</th>
+            <th>Views</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for temple in top_temples %}
+          <tr>
+            <td>
+              <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#d4af37,#a07820);color:#1a0c05;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:0.72rem;font-weight:700">
+                {{ loop.index }}
+              </div>
+            </td>
+            <td><strong style="font-size:0.85rem">{{ temple.name }}</strong></td>
+            <td>
+              <span class="status-badge {% if temple.category == 'Shiva' %}status-pending{% elif temple.category == 'Vishnu' %}status-active{% else %}status-approved{% endif %}"
+                    style="font-size:0.65rem">{{ temple.temple_type }}</span>
+            </td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <div style="flex:1;height:5px;background:#f0e6c8;border-radius:3px;overflow:hidden">
+                  <div style="height:100%;background:linear-gradient(90deg,#a07820,#d4af37);width:{{ [(temple.view_count or 0) / [(top_temples[0].view_count or 1), 1]|max * 100, 100]|min }}%"></div>
+                </div>
+                <span style="font-family:'Cinzel',serif;font-size:0.82rem;color:#a07820;min-width:30px">{{ temple.view_count or 0 }}</span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Reviews -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title"><i class="fas fa-star"></i> Recent Reviews</div>
+      <a href="{{ url_for('admin_reviews') }}" style="font-size:0.78rem;color:#a07820;text-decoration:none">
+        View All <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    <div class="admin-card-body" style="padding:0">
+      {% if recent_reviews %}
+      <table class="admin-table">
+        <thead>
+          <tr><th>User</th><th>Temple</th><th>Rating</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          {% for review in recent_reviews %}
+          <tr>
+            <td style="font-size:0.85rem"><strong>{{ review.user_id }}</strong></td>
+            <td style="font-size:0.82rem;color:#7a5535">{{ review.temple.name[:25] }}{% if review.temple.name|length > 25 %}...{% endif %}</td>
+            <td>
+              <span style="color:#d4af37">
+                {% for i in range(review.rating) %}★{% endfor %}
+                {% for i in range(5 - review.rating) %}<span style="color:#e8dcc0">★</span>{% endfor %}
+              </span>
+            </td>
+            <td style="font-size:0.75rem;color:#a08060">{{ review.created_at.strftime('%d %b') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="padding:32px;text-align:center;color:#a08060;font-style:italic">No reviews yet</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div class="admin-card-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+    </div>
+    <div class="admin-card-body">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="{{ url_for('admin_add_temple') }}" class="btn-form-submit" style="justify-content:flex-start">
+          <i class="fas fa-plus-circle"></i> Add New Temple
+        </a>
+        <a href="{{ url_for('admin_announcements') }}" class="btn-form-submit" style="justify-content:flex-start;background:linear-gradient(135deg,#a07820,#7a5a10)">
+          <i class="fas fa-bullhorn"></i> Create Announcement
+        </a>
+        <a href="{{ url_for('admin_contacts') }}" class="btn-form-submit" style="justify-content:flex-start;background:linear-gradient(135deg,#1a4a7a,#0a2a5a)">
+          <i class="fas fa-envelope"></i> View Messages
+          {% if contact_count > 0 %}
+          <span style="background:#e74c3c;color:white;padding:2px 7px;border-radius:100px;font-size:0.65rem;margin-left:auto">{{ contact_count }}</span>
+          {% endif %}
+        </a>
+        <a href="{{ url_for('admin_users') }}" class="btn-form-submit" style="justify-content:flex-start;background:linear-gradient(135deg,#1a5a1a,#0a3a0a)">
+          <i class="fas fa-users"></i> Manage Users
+        </a>
+        <a href="{{ url_for('admin_reviews') }}" class="btn-form-submit" style="justify-content:flex-start;background:linear-gradient(135deg,#5a3a00,#a07820)">
+          <i class="fas fa-star"></i> Moderate Reviews
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

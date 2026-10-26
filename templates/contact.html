@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Contact Us – Sthala Purana{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section" style="min-height: 50vh;">
+    <div>
+        <h1 class="hero-title">Contact Us</h1>
+        <p class="hero-subtitle">
+            Reach out for temple information, pilgrimage support, or collaboration
+        </p>
+    </div>
+</section>
+
+<!-- CONTENT -->
+<section class="section">
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- CONTACT INFO -->
+            <div class="col-md-5">
+
+                <div class="card-box">
+
+                    <h3 class="mb-3">Get In Touch</h3>
+
+                    <div class="mb-3">
+                        <strong>📧 Email</strong><br>
+                        support@sthalapurana.in
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>📞 Phone</strong><br>
+                        +91 98765 43210
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>📍 Location</strong><br>
+                        Mumbai, Maharashtra, India
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+            <div class="col-md-7">
+
+                <div class="card-box">
+
+                    <h3 class="mb-3">Send Message</h3>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" rows="5" class="form-control" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-gold w-100">
+                            Send Message
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

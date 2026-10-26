@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% block title %}{{ temple.name }} – Sthala Purana{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="temple-hero">
+  <div class="temple-hero-bg"
+style="background-image:url('{{ url_for('static', filename='images/' + temple.image) }}');">
+</div>
+  <div class="temple-hero-overlay"></div>
+  <div class="container temple-hero-content">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb breadcrumb-light">
+        <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('temples') }}">Temples</a></li>
+        <li class="breadcrumb-item active">{{ temple.name }}</li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+      <div>
+        <span class="temple-type-pill mb-2 d-inline-block">{{ temple.temple_type or 'Temple' }}</span>
+        <h1 class="temple-hero-title">{{ temple.name }}</h1>
+        <p class="temple-hero-deity"><i class="bi bi-flower1 me-2"></i>{{ temple.deity }}</p>
+        <p class="temple-hero-location"><i class="bi bi-geo-alt-fill me-2"></i>{{ temple.city }}, {{ temple.state }}</p>
+        <div class="d-flex align-items-center gap-3 mt-2">
+          <div class="rating-stars-lg">
+            {% for i in range(1,6) %}
+            <i class="bi bi-star{% if i <= temple.rating|int %}-fill text-warning{% endif %}"></i>
+            {% endfor %}
+            <span class="text-white ms-2">{{ temple.rating }} ({{ temple.review_count }} reviews)</span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        {% if current_user.is_authenticated %}
+        <button class="btn btn-outline-light fav-btn-lg {% if is_favorite %}active{% endif %}" onclick="toggleFavorite({{ temple.id }}, this, true)" id="favBtn">
+          <i class="bi bi-heart{% if is_favorite %}-fill text-danger{% endif %} me-2"></i>
+          {% if is_favorite %}Saved{% else %}Save{% endif %}
+        </button>
+        {% endif %}
+        {% if temple.latitude and temple.longitude %}
+        <a href="https://maps.google.com/?q={{ temple.latitude }},{{ temple.longitude }}" target="_blank" class="btn btn-saffron">
+          <i class="bi bi-map me-2"></i>Get Directions
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-4">
+      <!-- MAIN CONTENT -->
+      <div class="col-lg-8">
+
+        <!-- TABS -->
+        <ul class="nav nav-tabs temple-tabs mb-4" id="templeTabs">
+          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Overview</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#history">History</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gallery">Gallery</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab">Reviews ({{ reviews|length }})</button></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- OVERVIEW -->
+          <div class="tab-pane fade show active" id="overview">
+            <div class="content-card">
+              <h4 class="content-card-title"><i class="bi bi-info-circle me-2 text-saffron"></i>About {{ temple.name }}</h4>
+              <p>{{ temple.description }}</p>
+              {% if temple.significance %}
+              <div class="significance-box mt-3">
+                <h6><i class="bi bi-star-fill text-warning me-2"></i>Significance</h6>
+                <p class="mb-0">{{ temple.significance }}</p>
+              </div>
+              {% endif %}
+            </div>
+
+            {% if temple.festivals %}
+            <div class="content-card mt-4">
+              <h4 class="content-card-title"><i class="bi bi-calendar-event me-2 text-saffron"></i>Festivals & Celebrations</h4>
+              <p>{{ temple.festivals }}</p>
+            </div>
+            {% endif %}
+
+            <!-- MAP -->
+            {% if temple.latitude and temple.longitude %}
+            <div class="content-card mt-4">
+              <h4 class="content-card-title"><i class="bi bi-map me-2 text-saffron"></i>Location</h4>
+              <div class="map-container">
+                <iframe
+                  src="https://maps.google.com/maps?q={{ temple.latitude }},{{ temple.longitude }}&z=15&output=embed"
+                  class="temple-map" allowfullscreen="" loading="lazy"></iframe>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- HISTORY -->
+          <div class="tab-pane fade" id="history">
+            <div class="content-card">
+              <h4 class="content-card-title"><i class="bi bi-clock-history me-2 text-saffron"></i>History & Background</h4>
+              <p>{{ temple.history or 'History information not available.' }}</p>
+            </div>
+          </div>
+
+          <!-- GALLERY -->
+          <div class="tab-pane fade" id="gallery">
+            <div class="content-card">
+              <h4 class="content-card-title"><i class="bi bi-images me-2 text-saffron"></i>Photo Gallery</h4>
+              {% if gallery %}
+              <div class="row g-2">
+                {% for img in gallery %}
+                <div class="col-6 col-md-4">
+                  <img src="{{ url_for('static', filename='images/temples/' ~ img) }}"
+     class="img-fluid rounded gallery-thumb"
+     alt="Gallery">
+                </div>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div class="row g-2">
+                {% for i in range(1,7) %}
+                <div class="col-6 col-md-4">
+                  <img src="https://source.unsplash.com/400x300/?temple,india,{{ temple.id * 3 + i }}"
+                       class="img-fluid rounded gallery-thumb" alt="Gallery photo {{ i }}" />
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- REVIEWS -->
+          <div class="tab-pane fade" id="reviews-tab">
+            <!-- Add Review Form -->
+            {% if current_user.is_authenticated and not user_review %}
+            <div class="content-card mb-4">
+              <h5 class="content-card-title"><i class="bi bi-pencil-square me-2 text-saffron"></i>Write a Review</h5>
+              <form method="POST" action="{{ url_for('add_review', temple_id=temple.id) }}">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Your Rating</label>
+                  <div class="star-rating-input" id="starInput">
+                    {% for i in range(1,6) %}
+                    <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" {% if i == 5 %}checked{% endif %} />
+                    <label for="star{{ i }}"><i class="bi bi-star-fill"></i></label>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="title" placeholder="Review title..." required />
+                </div>
+                <div class="mb-3">
+                  <textarea class="form-control" name="content" rows="4" placeholder="Share your experience..." required></textarea>
+                </div>
+                <div class="mb-3">
+                  <input type="date" class="form-control" name="visit_date" placeholder="Visit date" max="{{ '' }}" />
+                </div>
+                <button type="submit" class="btn btn-saffron"><i class="bi bi-send me-2"></i>Submit Review</button>
+              </form>
+            </div>
+            {% elif not current_user.is_authenticated %}
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <a href="{{ url_for('login') }}">Login</a> to write a review.
+            </div>
+            {% elif user_review %}
+            <div class="alert alert-success">
+              <i class="bi bi-check-circle me-2"></i>You have already reviewed this temple.
+            </div>
+            {% endif %}
+
+            <!-- Reviews List -->
+            {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">
+{% if review.user %}
+    {{ review.user.full_name[0] if review.user.full_name else review.user.username[0] }}
+{% else %}
+    U
+{% endif %}
+</div>
+
+<div class="review-author">
+{% if review.user %}
+    {{ review.user.full_name or review.user.username }}
+{% else %}
+    Unknown User
+{% endif %}
+</div>
+                </div>
+              </div>
+              <h6 class="review-title mt-2">{{ review.title }}</h6>
+              <p class="review-content">{{ review.content }}</p>
+              {% if review.visit_date %}
+              <small class="text-muted"><i class="bi bi-calendar me-1"></i>Visited: {{ review.visit_date }}</small>
+              {% endif %}
+              {% if current_user.is_authenticated and (current_user.id == review.user_id or current_user.is_admin) %}
+              <form method="POST" action="{{ url_for('delete_review', review_id=review.id) }}" class="d-inline mt-2">
+                <button type="submit" class="btn btn-outline-danger btn-xs" onclick="return confirm('Delete this review?')">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+              {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-chat-dots display-4"></i>
+              <p class="mt-2">No reviews yet. Be the first to review!</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="col-lg-4">
+        <!-- Visit Info -->
+        <div class="sidebar-card">
+          <div class="temple-section">
+
+    <h3>Visit Information</h3>
+
+    <div class="temple-info-grid">
+
+        <div class="info-box">
+            <strong>Timings</strong>
+            2:30 AM – 1:30 AM (next day)
+        </div>
+
+        <div class="info-box">
+            <strong>Entry Fee</strong>
+            Free (Special Darshan ₹300)
+        </div>
+
+        <div class="info-box">
+            <strong>Dress Code</strong>
+            Traditional only. Men: Dhoti/Pyjama. Women: Saree/Half-saree/Salwar
+        </div>
+
+        <div class="info-box">
+            <strong>Best Time</strong>
+            September to February
+        </div>
+
+        <div class="info-box">
+            <strong>Built</strong>
+            300 CE (approx.)
+        </div>
+
+        <div class="info-box">
+            <strong>Architecture</strong>
+            Dravidian
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- How to Reach -->
+       <div class="temple-section">
+
+    <h3>How to Reach</h3>
+
+    <div class="temple-info-grid">
+
+        <div class="info-box">
+            <strong>Nearest Railway</strong>
+            Tirupati Railway Station (20 km)
+        </div>
+
+        <div class="info-box">
+            <strong>Nearest Airport</strong>
+            Tirupati Airport (15 km)
+        </div>
+
+    </div>
+
+</div>
+
+        <!-- Add to Trip -->
+        {% if current_user.is_authenticated %}
+        <div class="sidebar-card mt-4">
+          <h5 class="sidebar-card-title"><i class="bi bi-suitcase me-2 text-saffron"></i>Add to Trip</h5>
+          <p class="small text-muted">Plan your visit by adding this temple to your trip planner.</p>
+          <a href="{{ url_for('planner') }}" class="btn btn-saffron w-100"><i class="bi bi-plus-circle me-2"></i>Open Trip Planner</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- SIMILAR TEMPLES -->
+    {% if similar_temples %}
+    <div class="mt-5">
+      <h4 class="section-title mb-4">More Temples in <span class="text-saffron">{{ temple.state }}</span></h4>
+      <div class="row g-3">
+        {% for t in similar_temples %}
+        <div class="col-md-3 col-6">
+          <a href="{{ url_for('temple_detail', temple_id=t.id) }}" class="similar-temple-card text-decoration-none">
+            <img src="{{ url_for('static', filename='images/' + img) }}"
+                 onerror="this.src='https://source.unsplash.com/300x200/?temple,india,{{ loop.index + 30 }}'"
+                 alt="{{ t.name }}" />
+            <div class="similar-temple-info">
+              <div class="fw-semibold small">{{ t.name }}</div>
+              <div class="text-muted" style="font-size:0.75rem">{{ t.city }}</div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

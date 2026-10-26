@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<section class="hero-section">
+
+    <div class="hero-content">
+
+    <h1 class="hero-title">
+        Explore Sacred Temples of India
+    </h1>
+
+    <p class="hero-subtitle">
+        Journey through devotion, history, and spirituality
+    </p>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+     STATS SECTION (UNIFORM CARDS)
+========================================== -->
+<section class="section">
+
+    <div class="container">
+
+        <div class="stats-wrapper">
+
+            <div class="stat-box">
+                <h2>100+</h2>
+                <p>Temples</p>
+            </div>
+
+            <div class="stat-box">
+                <h2>20+</h2>
+                <p>States</p>
+            </div>
+
+            <div class="stat-box">
+                <h2>20+</h2>
+                <p>Users</p>
+            </div>
+
+            <div class="stat-box">
+                <h2>4.8</h2>
+                <p>Rating</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+     FEATURED TEMPLES (NO BOOTSTRAP CHAOS)
+========================================== -->
+<section class="section">
+
+    <div class="container">
+
+        <h2 class="section-title">Featured Temples</h2>
+
+        <div class="temple-grid">
+
+           <!-- ==========================================
+     FEATURED DESTINATIONS (STATIC)
+========================================== -->
+<section class="section">
+
+    <div class="container">
+
+        <h2 class="section-title text-center mb-2">
+            Choose Your Pilgrimage Destination
+        </h2>
+
+        <p class="text-center text-muted mb-4">
+            Popular Destinations
+        </p>
+
+        <div class="temple-grid">
+
+            <!-- Uttarakhand -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Uttarakhand</h5>
+                    <p class="temple-location">Kedarnath • Badrinath</p>
+                </div>
+            </div>
+
+            <!-- Uttar Pradesh -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Uttar Pradesh</h5>
+                    <p class="temple-location">Vrindavan • Mathura</p>
+                </div>
+            </div>
+
+            <!-- Maharashtra -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Maharashtra</h5>
+                    <p class="temple-location">Shirdi • Trimbakeshwar</p>
+                </div>
+            </div>
+
+            <!-- Gujarat -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Gujarat</h5>
+                    <p class="temple-location">Dwarka</p>
+                </div>
+            </div>
+
+            <!-- Tamil Nadu -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Tamil Nadu</h5>
+                    <p class="temple-location">Meenakshi • Rameshwaram</p>
+                </div>
+            </div>
+
+            <!-- Andhra Pradesh -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Andhra Pradesh</h5>
+                    <p class="temple-location">Tirupati</p>
+                </div>
+            </div>
+
+            <!-- Madhya Pradesh -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Madhya Pradesh</h5>
+                    <p class="temple-location">Ujjain</p>
+                </div>
+            </div>
+
+            <!-- Telangana -->
+            <div class="temple-card">
+                <div class="temple-content text-center">
+                    <h5 class="temple-name">Telangana</h5>
+                    <p class="temple-location">Yadadri</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+     CTA SECTION
+========================================== -->
+<section class="cta-section">
+
+    <div class="container text-center">
+
+        <h2>Start Your Spiritual Journey</h2>
+
+        <a href="{{ url_for('temples') }}" class="btn btn-gold mt-3">
+            <h3>Explore All Temples</h3>
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

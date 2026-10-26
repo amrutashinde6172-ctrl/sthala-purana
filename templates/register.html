@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Register – Sthala Purana{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="container">
+    <div class="auth-card mx-auto" style="max-width:560px">
+      <div class="auth-card-header">
+        <div class="auth-om">ॐ</div>
+        <h3>Create Account</h3>
+        <p class="text-muted">Join the Sthala Purana community</p>
+      </div>
+      <form method="POST" action="{{ url_for('register') }}">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" class="form-control" name="full_name" placeholder="Your full name" />
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Username <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-at"></i></span>
+              <input type="text" class="form-control" name="username" placeholder="Choose a username" required />
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Email Address <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" name="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Password <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" name="password" placeholder="Create password" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+              <input type="password" class="form-control" name="confirm_password" placeholder="Confirm password" required />
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <button type="submit" class="btn btn-saffron w-100 py-2">
+              <i class="bi bi-person-plus me-2"></i>Create Account
+            </button>
+          </div>
+          <div class="col-12 text-center">
+            <span class="text-muted small">Already have an account? </span>
+            <a href="{{ url_for('login') }}" class="text-saffron fw-semibold">Login here</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found – Sthala Purana{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.error-wrapper{
+    min-height:85vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:2rem;
+}
+
+.error-card{
+    max-width:760px;
+    width:100%;
+    background:white;
+    border-radius:28px;
+    padding:4rem 2rem;
+    border:1px solid var(--border);
+    box-shadow:0 12px 35px rgba(0,0,0,.08);
+    position:relative;
+    overflow:hidden;
+}
+
+.error-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at top right, rgba(212,160,23,.1), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(232,80,10,.08), transparent 35%);
+}
+
+.error-code{
+    font-size:7rem;
+    font-family:'Cinzel',serif;
+    color:var(--saffron);
+    line-height:1;
+    position:relative;
+    z-index:1;
+}
+
+.error-title{
+    font-family:'Cinzel',serif;
+    color:var(--crimson);
+    margin-top:1rem;
+    position:relative;
+    z-index:1;
+}
+
+.error-desc{
+    color:var(--text-light);
+    max-width:600px;
+    margin:1rem auto 2rem;
+    position:relative;
+    z-index:1;
+}
+
+.error-actions{
+    display:flex;
+    justify-content:center;
+    gap:1rem;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:1;
+}
+
+.error-btn{
+    padding:1rem 1.6rem;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.error-primary{
+    background:linear-gradient(135deg,var(--saffron),var(--gold));
+    color:white;
+}
+
+.error-secondary{
+    border:2px solid var(--gold);
+    color:var(--gold);
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="error-wrapper">
+
+    <div class="error-card">
+
+        <div class="error-code">
+            404
+        </div>
+
+        <h1 class="error-title">
+            Sacred Path Not Found
+        </h1>
+
+        <p class="error-desc">
+            The page you are looking for may have been moved,
+            removed, or does not exist in this spiritual archive.
+        </p>
+
+        <div class="error-actions">
+
+            <a href="/" class="error-btn error-primary">
+                <i class="fas fa-house"></i>
+                Return Home
+            </a>
+
+            <a href="/temples" class="error-btn error-secondary">
+                <i class="fas fa-gopuram"></i>
+                Explore Temples
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

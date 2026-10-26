@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% block title %}My Profile – Sthala Purana{% endblock %}
+
+{% block content %}
+
+<!-- Compact Header -->
+<section class="page-header">
+    <div class="container">
+        <h2 class="mb-0">
+            <i class="bi bi-person-circle me-2"></i>
+            My Profile
+        </h2>
+    </div>
+</section>
+
+<section class="profile-section">
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- LEFT PROFILE PANEL -->
+            <div class="col-lg-3">
+
+                <div class="content-card text-center">
+
+                    <div class="profile-avatar mx-auto">
+                        {{ (current_user.full_name or current_user.username)[0].upper() }}
+                    </div>
+
+                    <h4 class="mt-3">
+                        {{ current_user.full_name or current_user.username }}
+                    </h4>
+
+                    <p class="text-muted mb-2">
+                        @{{ current_user.username }}
+                    </p>
+
+                    {% if current_user.city or current_user.state %}
+                    <p class="small text-muted">
+                        <i class="bi bi-geo-alt me-1"></i>
+                        {{ [current_user.city,current_user.state]|select|join(', ') }}
+                    </p>
+                    {% endif %}
+
+                    {% if current_user.bio %}
+                    <p class="small">
+                        {{ current_user.bio }}
+                    </p>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="row text-center">
+
+                        <div class="col-4">
+                            <h5 class="mb-0">{{ user_reviews|length }}</h5>
+                            <small>Reviews</small>
+                        </div>
+
+                        <div class="col-4">
+                            <h5 class="mb-0">{{ user_favorites|length }}</h5>
+                            <small>Favorites</small>
+                        </div>
+
+                        <div class="col-4">
+                            <h5 class="mb-0">{{ user_trips|length }}</h5>
+                            <small>Trips</small>
+                        </div>
+
+                    </div>
+
+                    <a href="{{ url_for('edit_profile') }}"
+                       class="btn btn-saffron w-100 mt-3">
+                        <i class="bi bi-pencil me-2"></i>
+                        Edit Profile
+                    </a>
+
+                    <p class="small text-muted mt-3 mb-0">
+                        Member since
+                        {{ current_user.joined_date.strftime('%B %Y') }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="col-lg-9">
+
+                <div class="content-card">
+
+                    <ul class="nav nav-pills mb-4">
+
+                        <li class="nav-item">
+                            <button class="nav-link active"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#reviews">
+                                Reviews
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#favorites">
+                                Favorites
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#trips">
+                                Trip Plans
+                            </button>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <!-- REVIEWS -->
+                        <div class="tab-pane fade show active"
+                             id="reviews">
+
+                            {% if user_reviews %}
+
+                                {% for review in user_reviews %}
+
+                                <div class="content-card mb-3">
+
+                                    <h5>
+                                        <a href="{{ url_for('temple_detail', temple_id=review.temple_id) }}"
+                                           class="text-decoration-none">
+                                            {{ review.temple.name }}
+                                        </a>
+                                    </h5>
+
+                                    <p class="text-muted">
+                                        {{ review.content }}
+                                    </p>
+
+                                    <small class="text-muted">
+                                        {{ review.created_at.strftime('%d %B %Y') }}
+                                    </small>
+
+                                </div>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                            <div class="empty-state">
+
+                                <i class="bi bi-chat-square-text display-4"></i>
+
+                                <h5 class="mt-3">
+                                    No Reviews Yet
+                                </h5>
+
+                                <p class="text-muted">
+                                    Visit a temple and share your experience.
+                                </p>
+
+                                <a href="{{ url_for('temples') }}"
+                                   class="btn btn-saffron">
+                                    Explore Temples
+                                </a>
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <!-- FAVORITES -->
+                        <div class="tab-pane fade"
+                             id="favorites">
+
+                            {% if user_favorites %}
+
+                            <div class="row g-3">
+
+                                {% for fav in user_favorites %}
+
+                                <div class="col-md-4">
+
+                                    <div class="content-card">
+
+                                        <h6>
+                                            {{ fav.temple.name }}
+                                        </h6>
+
+                                        <small class="text-muted">
+                                            {{ fav.temple.city }},
+                                            {{ fav.temple.state }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="empty-state">
+
+                                <i class="bi bi-heart display-4"></i>
+
+                                <h5 class="mt-3">
+                                    No Favorites Yet
+                                </h5>
+
+                                <p class="text-muted">
+                                    Save temples to view them here.
+                                </p>
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <!-- TRIPS -->
+                        <div class="tab-pane fade"
+                             id="trips">
+
+                            {% if user_trips %}
+
+                                {% for trip in user_trips %}
+
+                                <div class="content-card mb-3">
+
+                                    <h5>
+                                        {{ trip.name }}
+                                    </h5>
+
+                                    {% if trip.notes %}
+                                    <p class="text-muted">
+                                        {{ trip.notes }}
+                                    </p>
+                                    {% endif %}
+
+                                </div>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                            <div class="empty-state">
+
+                                <i class="bi bi-map display-4"></i>
+
+                                <h5 class="mt-3">
+                                    No Trips Planned
+                                </h5>
+
+                                <p class="text-muted">
+                                    Start planning your pilgrimage.
+                                </p>
+
+                                <a href="{{ url_for('planner') }}"
+                                   class="btn btn-saffron">
+                                    Create Trip
+                                </a>
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

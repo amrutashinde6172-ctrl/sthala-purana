@@ -1,0 +1,303 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}
+    {% if temple %}
+        Edit Temple
+    {% else %}
+        Manage Temples
+    {% endif %}
+    – Admin
+{% endblock %}
+
+{% block page_title %}
+    {% if temple %}
+        Edit: {{ temple.name }}
+    {% else %}
+        Temples Management
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if not temple or request.args.get('add') %}
+<!-- ================= ADD FORM ================= -->
+<div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+  <h5 class="fw-bold mb-4">
+    <i class="bi bi-plus-circle me-2 text-warning"></i>Add New Temple
+  </h5>
+
+  <form method="POST"
+        action="{{ url_for('admin_add_temple') }}"
+        enctype="multipart/form-data">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Temple Name *</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">City</label>
+        <input type="text" class="form-control" name="city">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">State</label>
+        <input type="text" class="form-control" name="state">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Temple Type</label>
+        <select class="form-select" name="temple_type">
+          <option>Shiva</option>
+          <option>Vishnu</option>
+          <option>Shakti</option>
+          <option>Ganesha</option>
+          <option>Sikh Gurdwara</option>
+          <option>Jain Temple</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">Location Address</label>
+        <input type="text" class="form-control" name="location">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">History</label>
+        <textarea class="form-control" name="history" rows="3"></textarea>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">Significance</label>
+        <textarea class="form-control" name="significance" rows="2"></textarea>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Architecture Style</label>
+        <input type="text" class="form-control" name="architecture_style">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Built Year</label>
+        <input type="text" class="form-control" name="built_year">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Opening Time</label>
+        <input type="text" class="form-control" name="opening_time">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Closing Time</label>
+        <input type="text" class="form-control" name="closing_time">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Entry Fee</label>
+        <input type="text" class="form-control" name="entry_fee">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Dress Code</label>
+        <input type="text" class="form-control" name="dress_code">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Best Time to Visit</label>
+        <input type="text" class="form-control" name="best_time_to_visit">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Festivals</label>
+        <input type="text" class="form-control" name="festivals">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nearest Railway Station</label>
+        <input type="text" class="form-control" name="nearest_railway">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nearest Airport</label>
+        <input type="text" class="form-control" name="nearest_airport">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Latitude</label>
+        <input type="number" step="any" class="form-control" name="latitude">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Longitude</label>
+        <input type="number" step="any" class="form-control" name="longitude">
+      </div>
+
+      <!-- ================= IMAGE UPLOAD FIXED ================= -->
+      <div class="col-12">
+        <label class="form-label fw-semibold">Temple Image</label>
+        <input type="file" name="image" accept="image/*" class="form-control">
+        <small class="text-muted">Upload JPG, PNG or WEBP image</small>
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_featured" id="featured">
+          <label class="form-check-label" for="featured">Mark as Featured</label>
+        </div>
+      </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-warning mt-4 px-4">
+      <i class="bi bi-check2 me-2"></i>Add Temple
+    </button>
+
+  </form>
+</div>
+{% endif %}
+
+<!-- ================= EDIT FORM ================= -->
+{% if temple and not request.args.get('add') %}
+<div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+  <h5 class="fw-bold mb-4">
+    <i class="bi bi-pencil me-2 text-primary"></i>Edit: {{ temple.name }}
+  </h5>
+
+  <form method="POST"
+        action="{{ url_for('admin_edit_temple', temple_id=temple.id) }}"
+        enctype="multipart/form-data">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Temple Name *</label>
+        <input type="text" class="form-control" name="name" value="{{ temple.name }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Main Deity</label>
+        <input type="text" class="form-control" name="deity" value="{{ temple.deity or '' }}">
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="city" value="{{ temple.city or '' }}" placeholder="City">
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="state" value="{{ temple.state or '' }}" placeholder="State">
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="temple_type" value="{{ temple.temple_type or '' }}" placeholder="Temple Type">
+      </div>
+
+      <div class="col-12">
+        <textarea class="form-control" name="description" rows="3">{{ temple.description or '' }}</textarea>
+      </div>
+
+      <div class="col-12">
+        <textarea class="form-control" name="history" rows="3">{{ temple.history or '' }}</textarea>
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="opening_time" value="{{ temple.opening_time or '' }}">
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="closing_time" value="{{ temple.closing_time or '' }}">
+      </div>
+
+      <div class="col-md-4">
+        <input type="text" class="form-control" name="entry_fee" value="{{ temple.entry_fee or '' }}">
+      </div>
+
+      <!-- optional image update -->
+      <div class="col-12">
+        <label class="form-label fw-semibold">Update Image</label>
+        <input type="file" name="image" accept="image/*" class="form-control">
+      </div>
+
+      <div class="col-12 d-flex align-items-center gap-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_featured"
+                 id="featurededit" {% if temple.is_featured %}checked{% endif %}>
+          <label class="form-check-label" for="featurededit">Featured</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4">
+          <i class="bi bi-check2 me-1"></i>Update
+        </button>
+
+        <a href="{{ url_for('admin_temples') }}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+
+    </div>
+  </form>
+</div>
+{% endif %}
+
+<!-- ================= LIST ================= -->
+<div class="admin-table">
+  <div class="admin-table-header">
+    <h6 class="mb-0">All Temples ({{ temples|length }})</h6>
+    <a href="{{ url_for('admin_add_temple') }}" class="btn btn-warning btn-sm">
+      <i class="bi bi-plus me-1"></i>Add New
+    </a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Name</th>
+          <th>Deity</th>
+          <th>Location</th>
+          <th>Type</th>
+          <th>Rating</th>
+          <th>Featured</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for t in temples %}
+        <tr>
+          <td class="fw-semibold">{{ t.name }}</td>
+          <td class="text-muted small">{{ t.deity or '–' }}</td>
+          <td class="text-muted small">{{ t.city }}, {{ t.state }}</td>
+          <td><span class="badge bg-secondary">{{ t.temple_type or '–' }}</span></td>
+          <td><i class="bi bi-star-fill text-warning"></i> {{ t.rating }}</td>
+          <td>
+            {% if t.is_featured %}
+              <span class="badge bg-warning text-dark">Yes</span>
+            {% else %}
+              <span class="badge bg-light text-muted">No</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('admin_edit_temple', temple_id=t.id) }}"
+               class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-pencil"></i>
+            </a>
+
+            <form method="POST"
+                  action="{{ url_for('admin_delete_temple', temple_id=t.id) }}"
+                  class="d-inline"
+                  onsubmit="return confirm('Delete {{ t.name }}?')">
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+{% endblock %}

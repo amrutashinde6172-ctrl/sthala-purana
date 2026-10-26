@@ -1,0 +1,30 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Contact Messages – Admin{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+{% block content %}
+<div class="row g-3">
+  {% if messages %}
+  {% for msg in messages %}
+  <div class="col-md-6">
+    <div class="bg-white rounded-3 p-3 shadow-sm border-start border-4 {% if not msg.is_read %}border-warning{% else %}border-light{% endif %}">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <strong>{{ msg.name }}</strong>
+          {% if not msg.is_read %}<span class="badge bg-warning text-dark ms-2">New</span>{% endif %}
+        </div>
+        <small class="text-muted">{{ msg.created_at.strftime('%d %b %Y %H:%M') }}</small>
+      </div>
+      <div class="text-muted small mt-1"><i class="bi bi-envelope me-1"></i>{{ msg.email }}</div>
+      {% if msg.subject %}<div class="fw-semibold mt-2">{{ msg.subject }}</div>{% endif %}
+      <p class="small mt-1 mb-0">{{ msg.message }}</p>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="col-12 text-center py-5 text-muted">
+    <i class="bi bi-inbox display-4"></i>
+    <p class="mt-2">No contact messages yet.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

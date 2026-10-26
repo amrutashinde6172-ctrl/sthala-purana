@@ -1,0 +1,947 @@
+/* ==========================================
+   STHALA PURANA PREMIUM UI (FINAL STABLE)
+========================================== */
+
+/* ROOT VARIABLES */
+:root{
+    --maroon:#6A0D1B;
+    --maroon-dark:#450811;
+    --gold:#D4A017;
+    --saffron:#F97316;
+    --cream:#F8F4EC;
+    --white:#FFFFFF;
+    --dark:#222;
+    --gray:#6b7280;
+
+    --radius:18px;
+    --shadow:0 12px 30px rgba(0,0,0,.08);
+    --shadow-lg:0 20px 40px rgba(0,0,0,.12);
+}
+
+/* ==========================================
+   GLOBAL RESET (FIX ALL GAPS)
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+}
+
+html, body{
+    margin:0 !important;
+    padding:0 !important;
+    overflow-x:hidden;
+    font-family:'Raleway',sans-serif;
+    background:var(--cream);
+    color:var(--dark);
+}
+
+/* remove default heading spacing */
+h1,h2,h3,h4,h5,h6,p{
+    margin:0;
+}
+
+/* ==========================================
+   LAYOUT STRUCTURE
+========================================== */
+
+.app-wrapper{
+    min-height: 30vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+
+main{
+    margin:0 ;
+    padding:0 ;
+}
+
+
+.page-content section:first-child{
+    margin-top:0;
+    padding-top:0;
+}
+
+/* ==========================================
+   NAVBAR (NO GAP FIX)
+========================================== */
+
+.main-navbar{
+    background:linear-gradient(135deg,var(--maroon-dark),var(--maroon));
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+    padding:12px 0;
+    margin:0 !important;
+
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.navbar{
+    margin:0 ;
+}
+
+.navbar *{
+    margin:0 ;
+}
+
+/* ==========================================
+   BRAND
+========================================== */
+
+.brand-logo{
+    text-decoration:none;
+}
+
+.brand-main{
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--gold);
+    font-family:'Cinzel',serif;
+}
+
+.brand-sub{
+    color:white;
+    font-size:1.4rem;
+    font-family:'Cinzel',serif;
+}
+
+/* ==========================================
+   NAV LINKS
+========================================== */
+
+.nav-link{
+    color:white !important;
+    font-weight:600;
+    padding:8px 14px !important;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.nav-link:hover{
+    color:var(--gold)!important;
+    background:rgba(255,255,255,.08);
+}
+
+/* ==========================================
+   SEARCH BAR
+========================================== */
+
+.nav-search input{
+    border-radius:12px;
+    border:none;
+    padding:10px 14px;
+    min-width:220px;
+}
+
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.page-header{
+    background:linear-gradient(135deg,var(--maroon-dark),var(--maroon));
+    color:white;
+    padding:25px 0;
+    text-align:center;
+    margin:0 !important;
+}
+
+
+
+/* ==========================================
+   HERO TEXT
+========================================== */
+
+.hero-title{
+    font-size:4rem;
+    font-family:'Cinzel',serif;
+    font-weight:700;
+}
+
+.hero-subtitle{
+    font-size:1.2rem;
+    margin-top:15px;
+    opacity:.9;
+}
+
+/* ==========================================
+   STATS GRID (BOXES)
+========================================== */
+
+.stats-wrapper{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+    margin-top:-40px;
+}
+
+.stat-box{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    transition:0.3s;
+}
+
+.stat-box:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow-lg);
+}
+
+.stat-box h2{
+    color:var(--maroon);
+    font-size:2rem;
+}
+
+.stat-box p{
+    color:var(--gray);
+    font-weight:600;
+}
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.content-card,
+.card-box{
+    background:white;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:24px;
+    transition:.3s;
+    height:100%;
+}
+
+.card-box:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-lg);
+}
+
+/* ==========================================
+   TEMPLE GRID
+========================================== */
+
+.temple-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+/* ==========================================
+   IMAGE FIX
+========================================== */
+
+.temple-image{
+    height:230px;
+    overflow:hidden;
+}
+
+.temple-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn-saffron{
+    background:var(--saffron);
+    color:white;
+    border:none;
+}
+
+.btn-saffron:hover{
+    background:#ea580c;
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.footer{
+    background:var(--maroon-dark);
+    color:white;
+    padding:60px 0 30px;
+    margin-top:0;
+}
+
+/* ==========================================
+   BOOTSTRAP GAP FIX
+========================================== */
+
+.container{
+    margin-top:0 !important;
+    padding-top:0 !important;
+}
+
+.row{
+    margin-top:0 !important;
+}
+
+.col, [class*="col-"]{
+    margin-top:0 !important;
+}
+
+
+/* ==========================================
+   HERO (CENTER CLEAN DESIGN)
+========================================== */
+
+.hero-section{
+    height:80vh;
+    margin:0;
+    padding:0;
+
+    background:url("../images/home_banner.jpeg") no-repeat center center;
+    background-size:cover;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+
+.hero-title{
+    color:rgb(57, 2, 2);
+    font-size:4rem;
+    font-family:'Cinzel', serif;
+    font-weight:700;
+}
+
+.hero-subtitle{
+    color:rgb(5, 5, 0);
+    font-size:1.3rem;
+}
+/* ==========================================
+   STATS (CLEAN GRID)
+========================================== */
+
+.stats-wrapper{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.stat-box{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.stat-box:hover{
+    transform:translateY(-5px);
+}
+
+.stat-box h2{
+    color:var(--maroon);
+    font-size:2rem;
+}
+
+.stat-box p{
+    color:gray;
+}
+
+/* ==========================================
+   TEMPLE CARDS (FIXED GRID)
+========================================== */
+
+.temple-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.temple-card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.temple-card:hover{
+    transform:translateY(-6px);
+}
+
+.temple-image img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.temple-content{
+    padding:15px;
+}
+
+.temple-name{
+    color:var(--maroon);
+    font-weight:700;
+}
+
+.temple-location{
+    color:gray;
+    font-size:0.9rem;
+}
+
+/* ==========================================
+   CTA
+========================================== */
+
+.cta-section{
+    padding:60px 0;
+    text-align:center;
+}
+
+/* COMMON NAV BUTTON STYLE */
+.btn-nav{
+    border-radius:10px;
+    font-weight:600;
+    padding:6px 12px;
+    transition:0.3s;
+    color:white;
+}
+
+.btn-admin,
+.btn-package,
+.btn-agent,
+.btn-profile,
+.btn-planner,
+.btn-fav,
+.btn-logout{
+    background:#2c3e50;
+}
+
+.btn-admin:hover,
+.btn-package:hover,
+.btn-agent:hover,
+.btn-profile:hover,
+.btn-planner:hover,
+.btn-fav:hover,
+.btn-logout:hover{
+    background:#1a252f;
+}
+
+body{
+    background:#f6f6f6;
+}
+
+/* PAGE HEADER */
+h2{
+    font-weight:700;
+    color:#5A0E1A;
+}
+
+/* SEARCH BOX */
+.search-box input{
+    border-radius:14px;
+    padding:14px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    border:none;
+}
+
+/* FILTERS */
+.form-select{
+    border-radius:12px;
+    padding:10px;
+}
+
+/* TEMPLE CARD */
+.temple-card-large{
+    background:red;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    position:relative;
+    transition:0.3s;
+}
+
+.temple-card-large:hover{
+    transform:translateY(-5px);
+}
+
+/* FEATURED BADGE */
+.badge-featured{
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:gold;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+/* DESCRIPTION */
+.description{
+    color:gray;
+    margin-top:10px;
+}
+
+/* RATING */
+.rating{
+    color:gold;
+    font-size:18px;
+    margin-top:10px;
+}
+
+/* ==========================================
+   TEMPLE DIRECTORY - CLASSY UI
+========================================== */
+
+body{
+    background: #f6f3ee;
+}
+
+/* PAGE HEADER */
+.temples-header{
+    text-align:center;
+    padding:40px 20px 10px;
+}
+
+.temples-header h2{
+    font-family:'Cinzel', serif;
+    font-size:2.2rem;
+    color:var(--maroon-dark);
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.temples-header p{
+    color:#6b7280;
+    font-size:1rem;
+}
+
+/* SEARCH BOX */
+.temple-search{
+    max-width:650px;
+    margin:20px auto;
+    position:relative;
+}
+
+.temple-search input{
+    width:100%;
+    padding:14px 20px;
+    border-radius:50px;
+    border:1px solid #340101;
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    font-size:15px;
+}
+
+.temple-search input:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(212,160,23,0.2);
+}
+
+/* FILTER ROW */
+.filter-row{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:25px 0;
+    flex-wrap:wrap;
+}
+
+.filter-row select{
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    min-width:160px;
+    background:white;
+}
+
+/* RESULT TEXT */
+.result-text{
+    text-align:center;
+    color:#6b7280;
+    margin:15px 0;
+}
+
+/* GRID */
+.temple-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:22px;
+    padding:20px;
+}
+
+/* CARD */
+.temple-card{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    transition:0.3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.temple-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.12);
+}
+
+/* FEATURE BADGE */
+.temple-badge{
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:linear-gradient(135deg, var(--gold), var(--saffron));
+    color:#000;
+    padding:5px 12px;
+    font-size:11px;
+    font-weight:700;
+    border-radius:20px;
+}
+
+/* TITLE */
+.temple-title{
+    font-family:'Cinzel', serif;
+    font-size:1.2rem;
+    font-weight:700;
+    color:var(--maroon-dark);
+    margin-top:10px;
+}
+
+/* LOCATION */
+.temple-location{
+    color:#430202;
+    font-size:0.9rem;
+    margin-top:4px;
+}
+
+/* DEITY */
+.temple-deity{
+    margin-top:10px;
+    font-size:0.9rem;
+    color:#480202;
+}
+
+/* DESCRIPTION */
+.temple-desc{
+    margin-top:12px;
+    font-size:0.85rem;
+    color:#430202;
+    line-height:1.5;
+}
+
+/* RATING */
+.temple-rating{
+    margin-top:12px;
+    color:#f59e0b;
+    font-size:14px;
+}
+
+/* BUTTON */
+.temple-btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:8px 14px;
+    background:var(--maroon);
+    color:rgb(46, 2, 2);
+    border-radius:10px;
+    text-decoration:none;
+    font-size:13px;
+    transition:0.3s;
+}
+
+.temple-btn:hover{
+    background:var(--maroon-dark);
+}
+
+.temple-detail-container{
+    background:#b07516;
+    padding:30px;
+}
+
+.temple-header{
+    background:rgb(23, 216, 132);
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.temple-header h1{
+    font-family:'Cinzel', serif;
+    color:var(--maroon-dark);
+}
+
+.temple-meta{
+    color:#d55aba;
+    margin-top:5px;
+}
+
+.temple-tabs{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    border-bottom:1px solid #7b026f;
+}
+
+.temple-tabs button{
+    padding:10px 15px;
+    border:none;
+    background:none;
+    font-weight:600;
+    color:#555;
+    cursor:pointer;
+}
+
+.temple-tabs button.active{
+    color:var(--maroon);
+    border-bottom:3px solid var(--gold);
+}
+
+.temple-section{
+    background:rgb(3, 113, 58);
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+.temple-info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:15px;
+}
+
+.info-box{
+    background:#340202;
+    padding:12px;
+    border-radius:10px;
+}
+
+/* ==========================================
+   TEMPLE DETAIL / EXPLORE PAGE - PREMIUM THEME
+   (MAROON + GOLD + GREEN CLEAN UI)
+========================================== */
+
+/* PAGE WRAPPER */
+.temple-detail-container{
+    background:#f6f3ee;
+    padding:30px 15px;
+}
+
+/* HEADER CARD */
+.temple-header{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    margin-bottom:20px;
+    border-left:6px solid var(--maroon);
+}
+
+/* TITLE */
+.temple-header h1{
+    font-family:'Cinzel', serif;
+    font-size:2rem;
+    color:var(--maroon-dark);
+    font-weight:700;
+}
+
+/* META INFO */
+.temple-meta{
+    color:var(--gray);
+    margin-top:5px;
+}
+
+/* RATING (GOLD) */
+.temple-rating{
+    margin-top:10px;
+    color:var(--gold);
+    font-weight:700;
+}
+
+/* ================= TABS ================= */
+.temple-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+    border-bottom:2px solid var(--gold);
+    padding-bottom:10px;
+}
+
+/* TAB BUTTON */
+.temple-tabs button{
+    padding:10px 16px;
+    border:none;
+    background:#214801;
+    border-radius:10px;
+    font-weight:600;
+    color:var(--dark);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+/* ACTIVE TAB (MAROON + GOLD ACCENT) */
+.temple-tabs button.active{
+    background:var(--maroon);
+    color:rgb(22, 77, 3);
+    border-bottom:3px solid var(--gold);
+}
+
+/* HOVER */
+.temple-tabs button:hover{
+    background:var(--maroon-dark);
+    color:rgb(45, 75, 2);
+}
+
+/* ================= SECTIONS ================= */
+.temple-section{
+    background:white;
+    margin-top:20px;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    border-left:5px solid var(--gold);
+}
+
+/* SECTION TITLE */
+.temple-section h3{
+    font-family:'Cinzel', serif;
+    color:var(--maroon-dark);
+    margin-bottom:12px;
+    font-size:1.3rem;
+}
+
+/* TEXT */
+.temple-section p{
+    color:var(--dark);
+    line-height:1.7;
+}
+
+/* ================= INFO GRID ================= */
+.temple-info-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:15px;
+}
+
+.info-box{
+    background:white;
+    padding:14px;
+    border-radius:12px;
+    border-left:4px solid #2e7d32;
+    box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.info-box strong{
+    display:block;
+    color:var(--maroon-dark);
+    margin-bottom:4px;
+}
+
+/* ================= BADGES ================= */
+.badge-featured{
+    display:inline-block;
+    background:linear-gradient(135deg,var(--gold),#f59e0b);
+    color:black;
+    padding:5px 12px;
+    font-size:11px;
+    font-weight:700;
+    border-radius:20px;
+}
+
+/* ================= IMAGE GALLERY ================= */
+.temple-gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px;
+    margin-top:10px;
+}
+
+.temple-gallery img{
+    width:100%;
+    height:120px;
+    object-fit:cover;
+    border-radius:12px;
+    transition:0.3s;
+}
+
+.temple-gallery img:hover{
+    transform:scale(1.05);
+}
+
+/* ================= ADD TO TRIP BUTTON ================= */
+.add-trip-btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 16px;
+    background:var(--maroon);
+    color:rgb(94, 78, 2);
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.add-trip-btn:hover{
+    background:var(--maroon-dark);
+}
+
+/* ==========================================
+   TEMPLE FORM - IMAGE UPLOAD
+========================================== */
+
+.image-upload-group{
+    margin-bottom:20px;
+}
+
+.image-upload-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:var(--maroon-dark);
+}
+
+.image-upload-group input[type="file"]{
+    width:100%;
+    padding:12px;
+    border:2px dashed var(--gold);
+    border-radius:14px;
+    background:#fffdf7;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.image-upload-group input[type="file"]:hover{
+    background:#fff8e6;
+    border-color:var(--saffron);
+}
+
+.image-upload-group small{
+    display:block;
+    margin-top:8px;
+    color:var(--gray);
+    font-size:0.85rem;
+}
+
+/* IMAGE PREVIEW */
+
+.image-preview{
+    margin-top:15px;
+    text-align:center;
+}
+
+.image-preview img{
+    max-width:300px;
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:16px;
+    border:3px solid var(--gold);
+    box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}

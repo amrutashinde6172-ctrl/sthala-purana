@@ -1,0 +1,36 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Reviews – Admin{% endblock %}
+{% block page_title %}Reviews Management{% endblock %}
+{% block content %}
+<div class="admin-table">
+  <div class="admin-table-header">
+    <h6 class="mb-0">All Reviews ({{ reviews|length }})</h6>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr><th>Temple</th><th>User</th><th>Rating</th><th>Title</th><th>Date</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td class="small fw-semibold">{{ r.temple.name[:30] }}</td>
+          <td class="small text-muted">{{ r.author.username }}</td>
+          <td>{% for i in range(1,r.rating+1) %}<i class="bi bi-star-fill text-warning" style="font-size:11px"></i>{% endfor %}</td>
+          <td class="small">{{ r.title or '–' }}</td>
+          <td class="small text-muted">{{ r.created_at.strftime('%d %b %Y') }}</td>
+          <td><span class="badge bg-{% if r.is_approved %}success{% else %}warning text-dark{% endif %}">{% if r.is_approved %}Approved{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <form method="POST" action="{{ url_for('admin_toggle_review', review_id=r.id) }}" class="d-inline">
+              <button class="btn btn-sm btn-outline-{% if r.is_approved %}warning{% else %}success{% endif %}">
+                {% if r.is_approved %}Hide{% else %}Approve{% endif %}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

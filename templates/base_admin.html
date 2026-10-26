@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Admin Panel – Sthala Purana{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+  <style>
+    /* ── Admin Base Styles ───────────────────────────── */
+    body {
+  padding-bottom: 0 !important;
+  background: #f0ebe2;
+  font-family: 'Crimson Pro', serif;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.6;
+  color: #2c1a10;
+}
+    [data-theme="dark"] body, [data-theme="dark"] { background: #0f0a05; }
+
+    .admin-wrapper { display: flex; min-height: 100vh; padding-top: 66px; }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 260px; background: #1a0c05;
+      border-right: 1px solid rgba(212,175,55,0.12);
+      display: flex; flex-direction: column;
+      position: fixed; top: 66px; left: 0; bottom: 0;
+      overflow-y: auto; z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .admin-sidebar-header {
+      padding: 24px 20px; border-bottom: 1px solid rgba(212,175,55,0.12);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .admin-sidebar-logo { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
+    .admin-sidebar-title {
+  font-family: 'Cinzel', serif;
+  color: #d4af37;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-sidebar-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+}
+
+    .admin-nav-section { padding: 14px 12px 4px; }
+    .admin-nav-label { font-size: 0.62rem; color: rgba(255,255,255,0.25); letter-spacing: 0.18em; text-transform: uppercase; padding: 0 10px; margin-bottom: 4px; font-family: 'Cinzel', serif; }
+
+    .admin-nav-link {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 14px; border-radius: 8px;
+      color: rgba(255,255,255,0.55); font-size: 0.88rem;
+      text-decoration: none; transition: all 0.18s ease;
+      margin-bottom: 2px; position: relative;
+    }
+    .admin-nav-link i { width: 18px; text-align: center; font-size: 0.9rem; }
+    .admin-nav-link:hover { color: #f5d76e; background: rgba(212,175,55,0.1); }
+    .admin-nav-link.active {
+      color: #d4af37; background: rgba(212,175,55,0.14);
+      border-left: 3px solid #d4af37; padding-left: 11px;
+    }
+    .admin-nav-badge {
+      margin-left: auto; background: #7a1c1c; color: white;
+      font-size: 0.65rem; padding: 2px 7px; border-radius: 100px;
+    }
+    .admin-nav-link.danger { color: #ff8888; }
+    .admin-nav-link.danger:hover { background: rgba(255,80,80,0.1); }
+    .admin-sidebar-footer {
+      margin-top: auto; padding: 16px 12px;
+      border-top: 1px solid rgba(212,175,55,0.1);
+    }
+
+    /* Main Content */
+    .admin-content { margin-left: 260px; flex: 1; min-width: 0; }
+
+    /* Top Bar */
+    .admin-topbar {
+      background: white; border-bottom: 1px solid #e8dcc0;
+      padding: 0 28px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 66px; z-index: 90;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    [data-theme="dark"] .admin-topbar { background: #1a0c05; border-color: rgba(212,175,55,0.1); }
+    .admin-topbar-left { display: flex; align-items: center; gap: 16px; }
+    .admin-topbar-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 1.2rem;
+}
+    [data-theme="dark"] .admin-topbar-title { color: #f5d76e; }
+    .admin-breadcrumb { font-size: 0.82rem; color: #7a5535; }
+    .admin-breadcrumb a { color: #a07820; text-decoration: none; }
+    .admin-breadcrumb a:hover { color: #7a1c1c; }
+    .admin-topbar-right { display: flex; align-items: center; gap: 12px; }
+    .admin-user-info { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: #7a5535; }
+    .admin-user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, #7a1c1c, #5a1212);
+      color: #d4af37; display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+    }
+    .btn-topbar {
+      padding: 7px 16px; border-radius: 8px; font-size: 0.82rem;
+      font-family: 'Cinzel', serif; letter-spacing: 0.04em; text-transform: uppercase;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.18s ease; border: none; cursor: pointer;
+    }
+    .btn-topbar-primary { background: linear-gradient(135deg, #7a1c1c, #5a1212); color: white; box-shadow: 0 2px 8px rgba(90,18,18,0.3); }
+    .btn-topbar-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(90,18,18,0.4); }
+    .btn-topbar-ghost { background: none; border: 1px solid #e8dcc0; color: #7a5535; }
+    .btn-topbar-ghost:hover { border-color: #a07820; color: #a07820; }
+
+    /* Page Body */
+    .admin-body { padding: 28px; }
+
+    /* Flash Messages */
+    .admin-flash-container { padding: 0 28px; margin-bottom: 4px; }
+    .admin-flash {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px; border-radius: 8px; margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .admin-flash-success { background: rgba(20,50,20,0.08); border: 1px solid rgba(80,200,80,0.35); color: #1a5a1a; }
+    .admin-flash-error   { background: rgba(50,15,15,0.08); border: 1px solid rgba(220,60,60,0.35); color: #8b0000; }
+    .admin-flash-close { margin-left: auto; background: none; border: none; cursor: pointer; color: inherit; font-size: 1.1rem; opacity: 0.6; }
+
+    /* Cards */
+    .admin-card {
+      background: white; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,12,5,0.08);
+      border: 1px solid rgba(200,185,140,0.2);
+    }
+    [data-theme="dark"] .admin-card { background: #1a0f08; border-color: rgba(212,175,55,0.1); }
+    .admin-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px; border-bottom: 1px solid #f0e6c8;
+    }
+    [data-theme="dark"] .admin-card-header { border-color: rgba(212,175,55,0.1); }
+    .admin-card-title {
+      font-family: 'Cinzel', serif; color: #3a0808; font-size: 0.95rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    [data-theme="dark"] .admin-card-title { color: #f5d76e; }
+    .admin-card-title i { color: #a07820; }
+    .admin-card-body { padding: 22px; }
+
+    /* Stat Cards */
+    .admin-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-bottom: 28px; }
+    .stat-card {
+      background: white; border-radius: 14px; padding: 22px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 2px 12px rgba(26,12,5,0.08);
+      border: 1px solid rgba(200,185,140,0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    [data-theme="dark"] .stat-card { background: #1a0f08; border-color: rgba(212,175,55,0.1); }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(26,12,5,0.15); }
+    .stat-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .stat-icon-maroon { background: linear-gradient(135deg, #7a1c1c, #5a1212); color: #d4af37; }
+    .stat-icon-gold   { background: linear-gradient(135deg, #a07820, #7a5a10); color: white; }
+    .stat-icon-blue   { background: linear-gradient(135deg, #1a4a7a, #0a2a5a); color: #90c0ff; }
+    .stat-icon-green  { background: linear-gradient(135deg, #1a5a1a, #0a3a0a); color: #90ee90; }
+    .stat-icon-purple { background: linear-gradient(135deg, #4a1a7a, #2a0a5a); color: #d090ff; }
+    .stat-icon-saffron{ background: linear-gradient(135deg, #a04010, #e07820); color: white; }
+    .stat-num { font-family: 'Cinzel', serif; font-size: 2rem; color: #3a0808; line-height: 1; }
+    [data-theme="dark"] .stat-num { color: #f5d76e; }
+    .stat-label { font-size: 0.82rem; color: #7a5535; margin-top: 3px; }
+    .stat-trend { font-size: 0.72rem; margin-top: 4px; }
+    .stat-trend-up { color: #2ecc71; }
+    .stat-trend-down { color: #e74c3c; }
+
+    /* Tables */
+    .admin-table-wrap { overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    .admin-table th {
+      background: linear-gradient(135deg, #3a0808, #5a1212);
+      color: #f5d76e; padding: 12px 16px; text-align: left;
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+    }
+    .admin-table td { padding: 11px 16px; border-bottom: 1px solid #f7edcc; font-size: 0.88rem; vertical-align: middle; }
+    [data-theme="dark"] .admin-table td { border-color: rgba(212,175,55,0.08); color: rgba(255,255,255,0.75); }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: rgba(253,246,227,0.5); }
+    [data-theme="dark"] .admin-table tr:hover td { background: rgba(212,175,55,0.05); }
+    .admin-thumb { width: 48px; height: 42px; object-fit: cover; border-radius: 6px; }
+
+    /* Action Buttons */
+    .tbl-actions { display: flex; gap: 5px; align-items: center; }
+    .tbl-btn {
+      width: 32px; height: 32px; border-radius: 7px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; transition: all 0.15s ease; border: none; cursor: pointer;
+      text-decoration: none;
+    }
+    .tbl-btn-view   { background: #e8f5fe; color: #1a78c2; }
+    .tbl-btn-edit   { background: #fff8e8; color: #c07010; }
+    .tbl-btn-delete { background: #fef2f2; color: #c02020; }
+    .tbl-btn-approve{ background: #eafaea; color: #1a7a1a; }
+    .tbl-btn-view:hover   { background: #1a78c2; color: white; }
+    .tbl-btn-edit:hover   { background: #c07010; color: white; }
+    .tbl-btn-delete:hover { background: #c02020; color: white; }
+    .tbl-btn-approve:hover{ background: #1a7a1a; color: white; }
+
+    /* Status Badges */
+    .status-badge { padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 600; font-family: 'Cinzel', serif; letter-spacing: 0.04em; }
+    .status-active   { background: rgba(46,204,113,0.12); color: #1a7a1a; border: 1px solid rgba(46,204,113,0.3); }
+    .status-pending  { background: rgba(212,175,55,0.12); color: #a07820; border: 1px solid rgba(212,175,55,0.3); }
+    .status-inactive { background: rgba(200,50,50,0.12); color: #8b0000; border: 1px solid rgba(200,50,50,0.3); }
+    .status-approved { background: rgba(46,204,113,0.12); color: #1a7a1a; border: 1px solid rgba(46,204,113,0.3); }
+    .status-rejected { background: rgba(200,50,50,0.12); color: #8b0000; border: 1px solid rgba(200,50,50,0.3); }
+
+    /* Grid layouts */
+    .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .admin-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+    /* Forms */
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; }
+    .form-label { font-size: 0.82rem; color: #7a5535; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+    .form-label i { margin-right: 5px; color: #a07820; }
+    .form-control {
+      padding: 11px 16px; border: 1.5px solid #e8dcc0; border-radius: 10px;
+      font-family: 'Crimson Pro', serif; font-size: 0.98rem; color: #3d2010;
+      background: white; transition: all 0.18s ease;
+    }
+    .form-control:focus { outline: none; border-color: #a07820; box-shadow: 0 0 0 3px rgba(160,120,32,0.1); }
+    .form-control::placeholder { color: #a08060; }
+    textarea.form-control { resize: vertical; min-height: 100px; }
+    .form-hint { font-size: 0.78rem; color: #a08060; font-style: italic; margin-top: 3px; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .form-section { background: #fdf6e3; border: 1px solid #e8dcc0; border-radius: 12px; padding: 22px; margin-bottom: 0; }
+    .form-section-title {
+      font-family: 'Cinzel', serif; font-size: 0.82rem; color: #3a0808;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e8dcc0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-section-title i { color: #a07820; }
+    .form-actions { display: flex; gap: 12px; padding-top: 12px; border-top: 1px solid #e8dcc0; margin-top: 4px; }
+    .btn-form-submit {
+      background: linear-gradient(135deg, #7a1c1c, #5a1212); color: white;
+      border: none; padding: 12px 32px; border-radius: 8px;
+      font-family: 'Cinzel', serif; font-size: 0.82rem; letter-spacing: 0.06em;
+      text-transform: uppercase; cursor: pointer; transition: all 0.2s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 3px 14px rgba(90,18,18,0.3);
+    }
+    .btn-form-submit:hover { background: linear-gradient(135deg, #5a1212, #3a0808); transform: translateY(-1px); }
+    .btn-form-cancel {
+      padding: 12px 24px; border-radius: 8px; border: 1.5px solid #e8dcc0;
+      color: #7a5535; font-family: 'Cinzel', serif; font-size: 0.82rem;
+      text-transform: uppercase; background: none; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.18s ease;
+    }
+    .btn-form-cancel:hover { border-color: #7a1c1c; color: #7a1c1c; }
+
+    /* Toggle switch */
+    .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #e8dcc0; border-radius: 24px; transition: 0.3s; }
+    .toggle-slider::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+    input:checked + .toggle-slider { background: linear-gradient(135deg, #a07820, #d4af37); }
+    input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    /* Mobile sidebar toggle */
+    .sidebar-toggle-btn {
+      display: none; background: none; border: 1px solid rgba(212,175,55,0.3);
+      color: #d4af37; width: 36px; height: 36px; border-radius: 8px;
+      align-items: center; justify-content: center; font-size: 1rem; cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      .admin-sidebar { transform: translateX(-100%); }
+      .admin-sidebar.open { transform: translateX(0); }
+      .admin-content { margin-left: 0; }
+      .sidebar-toggle-btn { display: flex; }
+      .admin-stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 640px) {
+      .admin-stats-grid { grid-template-columns: 1fr; }
+      .admin-body { padding: 16px; }
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+      .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .temple-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #3a0808;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+}
+
+.temple-breadcrumb {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.9rem;
+  color: #7a5535;
+  margin-bottom: 18px;
+}
+
+.temple-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5a1212;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  border-left: 3px solid #d4af37;
+  padding-left: 10px;
+}
+
+.temple-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #5a1212;
+  margin-top: 10px;
+  display: block;
+}
+
+.temple-input {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c1a10;
+  letter-spacing: 0.2px;
+}
+
+.temple-input::placeholder {
+  color: #a08060;
+  font-style: italic;
+}
+
+.temple-textarea {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.temple-select {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.temple-helper {
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.78rem;
+  color: #a08060;
+  font-style: italic;
+}
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Navbar (reuse main navbar) ──────────────────────────── -->
+<nav class="navbar" style="z-index:200">
+  <div class="nav-inner">
+    <a href="{{ url_for('index') }}" class="nav-brand">
+      <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Logo" class="nav-logo"
+           onerror="this.style.display='none'">
+      <span class="brand-text">Sthala Purana</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="sidebar-toggle-btn" onclick="document.querySelector('.admin-sidebar').classList.toggle('open')">
+        <i class="fas fa-bars"></i>
+      </button>
+      <span style="font-family:'Cinzel',serif;color:#d4af37;font-size:0.82rem;letter-spacing:0.1em">ADMIN PANEL</span>
+      <a href="{{ url_for('index') }}" style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-left:8px">
+        <i class="fas fa-external-link-alt"></i> View Site
+      </a>
+      <a href="{{ url_for('logout') }}" style="color:#ff8888;font-size:0.85rem;margin-left:4px">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div style="position:fixed;top:76px;right:20px;z-index:9999;max-width:380px">
+    {% for cat, msg in messages %}
+    <div class="admin-flash admin-flash-{{ cat }}">
+      <i class="fas fa-{% if cat == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+      {{ msg }}
+      <button class="admin-flash-close" onclick="this.parentElement.remove()">×</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<div class="admin-wrapper">
+
+  <!-- ── Sidebar ───────────────────────────────────────────── -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-header">
+      <span class="admin-sidebar-logo">🛕</span>
+      <div>
+        <div class="admin-sidebar-title">Admin Panel</div>
+        <div class="admin-sidebar-subtitle">{{ session.username }}</div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Main</div>
+      <a href="{{ url_for('admin_dashboard') }}" class="admin-nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+        <i class="fas fa-gauge"></i> Dashboard
+      </a>
+    </div>
+
+    <!-- Temple Management -->
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Temples</div>
+      <a href="{{ url_for('admin_dashboard') }}" class="admin-nav-link {% if request.endpoint in ['admin_dashboard','admin_add_temple','admin_edit_temple'] %}active{% endif %}">
+        <i class="fas fa-gopuram"></i> Manage Temples
+      </a>
+      <a href="{{ url_for('admin_add_temple') }}" class="admin-nav-link">
+        <i class="fas fa-plus-circle"></i> Add New Temple
+      </a>
+    </div>
+
+    <!-- Users -->
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Users</div>
+      <a href="{{ url_for('admin_users') }}" class="admin-nav-link {% if request.endpoint == 'admin_users' %}active{% endif %}">
+        <i class="fas fa-users"></i> Manage Users
+      </a>
+    </div>
+
+    <!-- Content -->
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Content</div>
+      <a href="{{ url_for('admin_reviews') }}" class="admin-nav-link {% if request.endpoint == 'admin_reviews' %}active{% endif %}">
+        <i class="fas fa-star"></i> Reviews
+      </a>
+      <a href="{{ url_for('admin_contacts') }}" class="admin-nav-link {% if request.endpoint == 'admin_contacts' %}active{% endif %}">
+        <i class="fas fa-envelope"></i> Contact Messages
+        {% set unread = namespace(count=0) %}
+        {# Badge for unread contacts #}
+      </a>
+      <a href="{{ url_for('admin_announcements') }}" class="admin-nav-link {% if request.endpoint in ['admin_announcements','toggle_announcement','delete_announcement'] %}active{% endif %}">
+        <i class="fas fa-bullhorn"></i> Announcements
+      </a>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="admin-nav-section">
+      <div class="admin-nav-label">Quick Links</div>
+      <a href="{{ url_for('index') }}" class="admin-nav-link" target="_blank">
+        <i class="fas fa-home"></i> View Website
+      </a>
+      <a href="{{ url_for('temples') }}" class="admin-nav-link" target="_blank">
+        <i class="fas fa-list"></i> Temples Page
+      </a>
+    </div>
+
+    <div class="admin-sidebar-footer">
+      <a href="{{ url_for('logout') }}" class="admin-nav-link danger">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────────────── -->
+  <div class="admin-content">
+    <div class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="sidebar-toggle-btn" onclick="document.querySelector('.admin-sidebar').classList.toggle('open')" style="display:none">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div>
+          <div class="admin-topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+          <div class="admin-breadcrumb">
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a> /
+            {% block breadcrumb %}Dashboard{% endblock %}
+          </div>
+        </div>
+      </div>
+      <div class="admin-topbar-right">
+        {% block topbar_actions %}
+        <a href="{{ url_for('index') }}" class="btn-topbar btn-topbar-ghost" target="_blank">
+          <i class="fas fa-eye"></i> View Site
+        </a>
+        {% endblock %}
+        <div class="admin-user-info">
+          <span>{{ session.get('username', 'Admin') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-body">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<script>
+// Close sidebar on outside click (mobile)
+document.addEventListener('click', function(e) {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const toggleBtns = document.querySelectorAll('.sidebar-toggle-btn');
+  let clickedToggle = false;
+  toggleBtns.forEach(btn => { if (btn.contains(e.target)) clickedToggle = true; });
+  if (!clickedToggle && !sidebar.contains(e.target)) {
+    sidebar.classList.remove('open');
+  }
+});
+// Auto dismiss flash
+setTimeout(() => {
+  document.querySelectorAll('.admin-flash').forEach(f => f.remove());
+}, 4000);
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block title %}Temples Directory – Sthala Purana{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO ================= -->
+<section class="hero-section" style="min-height: 45vh;">
+    <div class="hero-content">
+        <h1 class="hero-title">Temples Directory</h1>
+        <p class="hero-subtitle">Discover sacred destinations across India</p>
+    </div>
+</section>
+
+<!-- ================= FILTER BAR ================= -->
+<section class="section">
+    <div class="container">
+
+        <div class="filter-glass">
+
+            <form method="GET" action="{{ url_for('temples') }}">
+
+                <div class="row g-3 align-items-center">
+
+                    <!-- SEARCH -->
+                    <div class="col-lg-4">
+                        <div class="input-group glass-input">
+                            <span class="input-group-text">🔍</span>
+                            <input type="text"
+                                   class="form-control"
+                                   name="search"
+                                   value="{{ search }}"
+                                   placeholder="Search temples, city, deity...">
+                        </div>
+                    </div>
+
+                    <!-- FILTERS -->
+                    <div class="col-lg-2">
+                        <select class="form-select glass-select" name="state" onchange="this.form.submit()">
+                            <option value="">State</option>
+                            {% for s in states %}
+                                <option value="{{ s }}" {% if state_filter == s %}selected{% endif %}>{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <select class="form-select glass-select" name="deity" onchange="this.form.submit()">
+                            <option value="">Deity</option>
+                            {% for d in deities %}
+                                <option value="{{ d }}" {% if deity_filter == d %}selected{% endif %}>{{ d }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <select class="form-select glass-select" name="type" onchange="this.form.submit()">
+                            <option value="">Type</option>
+                            {% for t in types %}
+                                <option value="{{ t }}" {% if type_filter == t %}selected{% endif %}>{{ t }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button class="btn btn-glow w-100">
+                            Apply
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section class="section">
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div class="text-muted">
+                Showing <strong>{{ temples.items|length }}</strong> of
+                <strong>{{ temples.total }}</strong> temples
+            </div>
+
+            {% if search or state_filter or deity_filter or type_filter %}
+            <a href="{{ url_for('temples') }}" class="btn btn-outline-dark btn-sm">
+                Clear Filters
+            </a>
+            {% endif %}
+
+        </div>
+
+        <!-- GRID -->
+        {% if temples.items %}
+
+        <div class="row g-4">
+
+            {% for temple in temples.items %}
+
+            <div class="col-lg-4 col-md-6">
+
+    <div class="temple-glass-card">
+
+      <div class="temple-image">
+ <img src="/static/images/temples.jpg"
+         alt="temples">
+    {% if temple.image %}
+        <img src="{{ url_for('static', filename='images/' ~ temple.image) }}"
+             alt="{{ temple.name }}">
+    {% else %}
+        <img src="https://source.unsplash.com/600x400/?temple,india"
+             alt="Temple">
+    {% endif %}
+
+</div>
+
+
+
+        <div class="temple-body">
+
+            <h5>{{ temple.name }}</h5>
+
+            <p class="location">
+                📍 {{ temple.city or 'Unknown City' }},
+                {{ temple.state or 'Unknown State' }}
+            </p>
+
+            <p class="deity">
+                🙏 {{ temple.deity or 'Sacred Temple' }}
+            </p>
+
+            <p class="desc">
+                {% if temple.description %}
+                    {{ temple.description[:110] }}...
+                {% else %}
+                    No description available.
+                {% endif %}
+            </p>
+
+            <div class="temple-footer">
+
+                <div class="rating">
+                    {% for i in range(1,6) %}
+                        {% if temple.rating and i <= temple.rating|int %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <a href="{{ url_for('temple_detail', temple_id=temple.id) }}"
+                   class="btn btn-glow-sm">
+                    Explore
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY STATE -->
+        <div class="empty-premium">
+
+            <h3>No Temples Found</h3>
+            <p>Try adjusting your filters or search again</p>
+
+            <a href="{{ url_for('temples') }}" class="btn btn-glow">
+                Reset Filters
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+<!-- ================= PAGINATION ================= -->
+{% if temples.pages > 1 %}
+<section class="section">
+    <div class="container text-center">
+
+        <div class="pagination-glass">
+
+            {% if temples.has_prev %}
+            <a href="{{ url_for('temples', page=temples.prev_num, search=search, state=state_filter, deity=deity_filter, type=type_filter) }}">
+                ← Prev
+            </a>
+            {% endif %}
+
+            <span>Page {{ temples.page }}</span>
+
+            {% if temples.has_next %}
+            <a href="{{ url_for('temples', page=temples.next_num, search=search, state=state_filter, deity=deity_filter, type=type_filter) }}">
+                Next →
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

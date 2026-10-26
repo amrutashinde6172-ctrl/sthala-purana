@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Recommendations – Sthala Purana{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1><i class="bi bi-stars me-3"></i>Temple Recommendations</h1>
+    <p class="text-white-50 mb-0">Curated selections based on ratings and popularity</p>
+  </div>
+</section>
+<section class="section-padding">
+  <div class="container">
+    <div class="filter-panel mb-4">
+      <form method="GET">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <select class="form-select" name="state" onchange="this.form.submit()">
+              <option value="">All States</option>
+              {% for s in states %}<option value="{{ s }}" {% if state_filter==s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <select class="form-select" name="deity" onchange="this.form.submit()">
+              <option value="">All Deities</option>
+              {% for d in deities %}<option value="{{ d }}" {% if deity_filter==d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+            </select>
+          </div>
+          {% if state_filter or deity_filter %}
+          <div class="col-md-2"><a href="{{ url_for('recommendations') }}" class="btn btn-outline-secondary">Clear</a></div>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+    {% if recommended %}
+    <div class="row g-4">
+      {% for temple in recommended %}
+      <div class="col-lg-4 col-md-6">
+        <div class="temple-card">
+          <div class="temple-card-image">
+            <img src="https://source.unsplash.com/600x400/?temple,india,{{ loop.index + 10 }}" alt="{{ temple.name }}" />
+            <div class="temple-card-overlay"><a href="{{ url_for('temple_detail', temple_id=temple.id) }}" class="btn btn-light btn-sm">View Details</a></div>
+            {% if loop.index <= 3 %}<div class="featured-badge"><i class="bi bi-trophy me-1"></i>Top #{{ loop.index }}</div>{% endif %}
+          </div>
+          <div class="temple-card-body">
+            <div class="temple-location"><i class="bi bi-geo-alt-fill me-1"></i>{{ temple.city }}, {{ temple.state }}</div>
+            <h5 class="temple-name"><a href="{{ url_for('temple_detail', temple_id=temple.id) }}">{{ temple.name }}</a></h5>
+            <p class="temple-deity"><i class="bi bi-flower1 me-1"></i>{{ temple.deity }}</p>
+            <div class="temple-card-footer">
+              <div class="temple-rating">
+                {% for i in range(1,6) %}<i class="bi bi-star{% if i <= temple.rating|int %}-fill text-warning{% endif %} small"></i>{% endfor %}
+                <span class="ms-1 small text-muted">{{ temple.rating }} ({{ temple.review_count }})</span>
+              </div>
+              <a href="{{ url_for('temple_detail', temple_id=temple.id) }}" class="btn btn-saffron-outline btn-sm">Explore</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state text-center py-5">
+      <i class="bi bi-stars display-1 text-muted"></i>
+      <h4 class="mt-3 text-muted">No temples match your filters</h4>
+      <a href="{{ url_for('recommendations') }}" class="btn btn-saffron">View All</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

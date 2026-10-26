@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}My Favorites – Sthala Purana{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-section" style="min-height: 40vh;">
+    <div>
+        <h1 class="hero-title">My Favorite Temples</h1>
+        <p class="hero-subtitle">Your saved spiritual journeys</p>
+    </div>
+</section>
+
+<!-- CONTENT -->
+<section class="section">
+    <div class="container">
+
+        {% if favorites %}
+
+        <div class="mb-4 text-muted">
+            You have <strong>{{ favorites|length }}</strong> saved temple(s)
+        </div>
+
+        <div class="row g-4">
+
+            {% for fav in favorites %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="temple-card">
+
+                    <!-- IMAGE -->
+                    <div class="temple-card-image">
+
+                        <img src="https://source.unsplash.com/600x400/?temple,india,{{ fav.temple_id }}"
+                             alt="{{ fav.temple.name }}">
+
+                        <!-- VIEW -->
+                        <div class="temple-card-overlay">
+                            <a href="{{ url_for('temple_detail', temple_id=fav.temple.id) }}"
+                               class="btn btn-light btn-sm">
+                                View Details
+                            </a>
+                        </div>
+
+                        <!-- REMOVE FAVORITE -->
+                        <button class="fav-btn active"
+                                onclick="toggleFavorite({{ fav.temple.id }}, this)">
+                            ❤️
+                        </button>
+
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="temple-card-body">
+
+                        <div class="temple-location">
+                            📍 {{ fav.temple.city }}, {{ fav.temple.state }}
+                        </div>
+
+                        <h5 class="temple-name">
+                            <a href="{{ url_for('temple_detail', temple_id=fav.temple.id) }}">
+                                {{ fav.temple.name }}
+                            </a>
+                        </h5>
+
+                        <div class="temple-deity">
+                            🙏 {{ fav.temple.deity }}
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div class="temple-card-footer">
+
+                            <div class="text-warning small">
+                                {% for i in range(1,6) %}
+                                    {% if i <= fav.temple.rating|int %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <small class="text-muted">
+                                Saved {{ fav.added_at.strftime('%d %b %Y') }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY STATE -->
+        <div class="empty-state">
+
+            <h3>No Favorites Yet 💔</h3>
+            <p class="text-muted">
+                Explore temples and click the heart icon to save them
+            </p>
+
+            <a href="{{ url_for('temples') }}" class="btn btn-gold mt-3">
+                Explore Temples
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}
